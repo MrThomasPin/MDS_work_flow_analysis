@@ -1,12 +1,11 @@
 #load packages
-
 library(tidyverse)
 library(gganimate)
 library(lubridate)
 library(magick)
 
 #load dataframe
-workload <- read_csv("workload_v2.csv")
+workload <- read_csv("data/workload_v2.csv")
 workload <- workload %>% select(-`Days from today`)
 
 #' Trim & wrangle the large workload to a given work week, and remove the NA columns
@@ -75,7 +74,7 @@ time_kanban <- function(df, week=1){
   p <- ggplot(df, aes(x=course, y=progress, label = wday))+
     geom_point(shape=19, size=12, aes(color =progress))+
     geom_text(x=.45, y=3.59, hjust=0)+
-    labs(title = 'Date: {frame_time}', 
+    labs(title = 'Date: {frame_time} MDS Block 5 Kanban Board by Thomas Pin', 
          subtitle = paste0("Week: ", week), x = 'Course', y = '')+
     transition_time(date)+
     ease_aes('linear')+
@@ -87,12 +86,12 @@ time_kanban <- function(df, week=1){
           panel.grid.minor = element_blank(), 
           plot.margin = unit(c(1, 1, 1, 1), "lines"),
           legend.position = "none")
-  animate(p, start_pause=10, end_pause=10, duration=2, height=450)
+  animate(p, start_pause=10, end_pause=10, duration=2, height=600)
   anim_save(paste0("gifs/0", week, "_week_kanaban.gif"))
 }
 
 #test kanban
-# time_kanban(workload_week1, 1)
+# time_kanban(workload_week4, 4)
 
 #make the animations for week 1-5
 time_kanban(workload_week1, 1)
